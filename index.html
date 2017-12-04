@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RPS</title>
+</head>
+<body>
+  <script>
+     // Your JavaScript goes here!
+
+     let human;
+     let humanNumber;
+     let cpu;
+     let cpuNumber;
+     function humanThrow(a) {
+        let b = a.toLowerCase();
+        if (b == 'rock') {
+            humanNumber = 1;
+            alert(`You threw ${b}!`);
+        } else if (b == 'paper') {
+            humanNumber = 2;
+            alert(`You threw ${b}!`);
+        } else if (b == 'scissors') {
+            humanNumber = 3;
+            alert(`You threw ${b}!`);
+        } else {
+            humanNumber = 0;
+            alert('Invalid input');
+        }
+        human = b;
+    }
+    function cpuThrow(a) {
+        let throwNumber = Math.floor(Math.random() * 3) + 1;
+        cpuNumber = throwNumber;
+        if (throwNumber == 1) {
+            cpu = 'rock';
+            alert(`CPU threw ${cpu}!`);
+        } else if (throwNumber == 2) {
+            cpu = 'paper';
+            alert(`CPU threw ${cpu}!`);
+        } else {
+            cpu = 'scissors';
+            alert(`CPU threw ${cpu}!`);
+        }
+    }
+    let attempt = prompt('What is your throw?', '');
+    humanThrow(attempt);
+    if (humanNumber > 0) {
+        cpuThrow();
+    }
+
+    function throwResult() {
+        if (humanNumber == cpuNumber) {
+            alert('We have a tie!');
+        } else if ((humanNumber == 1 && cpuNumber == 2) || (humanNumber == 2 && cpuNumber == 3) || (humanNumber == 3 && cpuNumber == 1)) {
+            alert(`Sorry, ${cpu} beats ${human}, you lose!`);
+        } else if ((cpuNumber == 1 && humanNumber == 2) || (cpuNumber == 2 && humanNumber == 3) || (cpuNumber == 3 && humanNumber == 1)) {
+            alert(`Congratulations, ${human} beats ${cpu}, you win!`);
+        }
+    }
+    throwResult();
+
+  </script>
+</body>
+</html>
