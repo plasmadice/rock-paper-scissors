@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RPS</title>
+  <title>Rock, Paper, Scissors</title>
 </head>
 <body>
+    <h1>
+        <img src="images/rps.png" alt="Rock Paper Scissors render" style="margin: 0 auto; display: block;">
+    </h1>
   <script>
-     // Your JavaScript goes here!
-
      let human;
      let humanNumber;
      let cpu;
      let cpuNumber;
-     function humanThrow(a) {
+
+     function humanThrow(a) { //Changes human input into integer
         let b = a.toLowerCase();
         if (b == 'rock') {
             humanNumber = 1;
@@ -28,7 +30,8 @@
         }
         human = b;
     }
-    function cpuThrow(a) {
+
+    function cpuThrow(a) { //generates CPU input
         let throwNumber = Math.floor(Math.random() * 3) + 1;
         cpuNumber = throwNumber;
         if (throwNumber == 1) {
@@ -42,13 +45,14 @@
             alert(`CPU threw ${cpu}!`);
         }
     }
-    let attempt = prompt('What is your throw?', '');
-    humanThrow(attempt);
+
+    let attempt = prompt('What is your throw? Please enter Rock, Paper, or Scissors.', '');
+    humanThrow(attempt); // Prevents CPU from rolling if human enters invalid answer
     if (humanNumber > 0) {
         cpuThrow();
     }
 
-    function throwResult() {
+    function throwResult() { //Determines winner based on human input and cpu roll
         if (humanNumber == cpuNumber) {
             alert('We have a tie!');
         } else if ((humanNumber == 1 && cpuNumber == 2) || (humanNumber == 2 && cpuNumber == 3) || (humanNumber == 3 && cpuNumber == 1)) {
@@ -57,6 +61,7 @@
             alert(`Congratulations, ${human} beats ${cpu}, you win!`);
         }
     }
+
     throwResult();
 
   </script>
