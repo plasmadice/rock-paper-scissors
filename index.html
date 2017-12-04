@@ -5,65 +5,95 @@
 </head>
 <body>
     <h1>
-        <img src="images/rps.png" alt="Rock Paper Scissors render" style="margin: 0 auto; display: block;">
+        <img src="images/rps.png" alt="Rock Paper Scissors render" style="margin: 0 auto; display: block;">        
     </h1>
+    <p id="score"></p>
+    <p id="end"></p>
+    <button onclick="myFunction()" style ="margin: 0 auto;">Reload Page</button>
   <script>
-     let human;
-     let humanNumber;
-     let cpu;
-     let cpuNumber;
 
-     function humanThrow(a) { //Changes human input into integer
-        let b = a.toLowerCase();
-        if (b == 'rock') {
-            humanNumber = 1;
-            alert(`You threw ${b}!`);
-        } else if (b == 'paper') {
-            humanNumber = 2;
-            alert(`You threw ${b}!`);
-        } else if (b == 'scissors') {
-            humanNumber = 3;
-            alert(`You threw ${b}!`);
+let human;
+let humanNumber;
+let cpu;
+let cpuNumber;
+let text;
+let round=1;
+let humanScore=0;
+let cpuScore=0;
+let attempt;
+
+function humanThrow(a) { //Changes human input into integer
+   let b = a.toLowerCase();
+   if (b == 'rock') {
+       humanNumber = 1;
+   } else if (b == 'paper') {
+       humanNumber = 2;
+   } else if (b == 'scissors') {
+       humanNumber = 3;
+   } else {
+       humanNumber = 0;
+       alert('Invalid input');
+   }
+   human = b;
+}
+
+function cpuThrow(a) { //generates CPU input
+   let throwNumber = Math.floor(Math.random() * 3) + 1;
+   cpuNumber = throwNumber;
+   if (throwNumber == 1) {
+       cpu = 'rock';
+   } else if (throwNumber == 2) {
+       cpu = 'paper';
+   } else {
+       cpu = 'scissors';
+   }
+}
+
+function throwResult() { //Determines winner based on input and adds to scores
+   if (humanNumber == cpuNumber) {
+        text = 'We have a tie!';
+   } else if ((humanNumber == 1 && cpuNumber == 2) || (humanNumber == 2 && cpuNumber == 3) || (humanNumber == 3 && cpuNumber == 1)) {
+        text = 'You lose!';
+        cpuScore++;
+   } else if ((cpuNumber == 1 && humanNumber == 2) || (cpuNumber == 2 && humanNumber == 3) || (cpuNumber == 3 && humanNumber == 1)) {
+        text = 'You win!';
+        humanScore++;
+   }
+}
+
+function prompter() {
+    attempt = prompt('What is your throw? Please enter Rock, Paper, or Scissors.', '');
+}
+
+function game() {
+    while (round < 6) { // Runs main functions to generate rolls
+        prompter();
+        humanThrow(attempt);
+        if ((humanNumber > 0) && (round < 6)) {
+            cpuThrow();
+            throwResult();
+            alert(`You threw ${human}, CPU threw ${cpu}. ${text} Round: ${round} You: ${humanScore}, CPU: ${cpuScore}`);
+            round++;
+        } 
+    }
+}
+game();
+if (cpuScore == humanScore) {
+            alert('You tied!');
+            document.getElementById("end").innerHTML = 'Looks like it\'s a tie!';
+        } else if (humanScore > cpuScore) {
+            //alert('Congratulations! You\'ve won!');
+            document.getElementById("end").innerHTML = 'Congratulations! You\'ve won!';
         } else {
-            humanNumber = 0;
-            alert('Invalid input');
+            //alert('You lose! Reload to try again.')
+            document.getElementById("end").innerHTML = 'You lose! Reload to try again.';
         }
-        human = b;
-    }
 
-    function cpuThrow(a) { //generates CPU input
-        let throwNumber = Math.floor(Math.random() * 3) + 1;
-        cpuNumber = throwNumber;
-        if (throwNumber == 1) {
-            cpu = 'rock';
-            alert(`CPU threw ${cpu}!`);
-        } else if (throwNumber == 2) {
-            cpu = 'paper';
-            alert(`CPU threw ${cpu}!`);
-        } else {
-            cpu = 'scissors';
-            alert(`CPU threw ${cpu}!`);
-        }
-    }
 
-    let attempt = prompt('What is your throw? Please enter Rock, Paper, or Scissors.', '');
-    humanThrow(attempt); // Prevents CPU from rolling if human enters invalid answer
-    if (humanNumber > 0) {
-        cpuThrow();
-    }
-
-    function throwResult() { //Determines winner based on human input and cpu roll
-        if (humanNumber == cpuNumber) {
-            alert('We have a tie!');
-        } else if ((humanNumber == 1 && cpuNumber == 2) || (humanNumber == 2 && cpuNumber == 3) || (humanNumber == 3 && cpuNumber == 1)) {
-            alert(`Sorry, ${cpu} beats ${human}, you lose!`);
-        } else if ((cpuNumber == 1 && humanNumber == 2) || (cpuNumber == 2 && humanNumber == 3) || (cpuNumber == 3 && humanNumber == 1)) {
-            alert(`Congratulations, ${human} beats ${cpu}, you win!`);
-        }
-    }
-
-    throwResult();
-
+document.getElementById("score").innerHTML = `Final score = You: ${humanScore} | CPU ${cpuScore}`;
+function myFunction() {
+    location.reload();
+}
   </script>
 </body>
 </html>
