@@ -8,36 +8,39 @@
         <img src="images/rps.png" alt="Rock Paper Scissors render" style="margin: 0 auto; display: block;">        
     </h1>
     <p id="score"></p>
+    <p id ="play">
+        <button id="rock" onclick="humanThrow('rock')" style="overflow:hidden;font-size: 15px; background:  black; box-sizing: border-box; box-shadow: 0 6px silver; border: none; color: #fff; padding: 20px 60px; display: inline-block; margin: 15px 30px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; outline: none; position: relative">Rock</button>
+        <button id="paper" onclick="humanThrow('paper')" style="overflow:hidden;font-size: 15px; background: black; box-sizing: border-box; box-shadow: 0 6px silver; border: none; color: #fff; padding: 20px 60px; display: inline-block; margin: 15px 30px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; outline: none; position: relative">Paper</button>
+        <button id="scissors" onclick="humanThrow('scissors')" style="overflow:hidden;font-size: 15px; background: black; box-sizing: border-box; box-shadow: 0 6px silver; border: none; color: #fff; padding: 20px 60px; display: inline-block; margin: 15px 30px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; outline: none; position: relative">Scissors</button>
+    </p>
     <p id="end"></p>
-    <button onclick="myFunction()" style ="margin: 0 auto;">Reload Page</button>
+    <button id="reload" onclick="myFunction()" style ="margin: 0 auto;">Reload Page</button>
   <script>
 
 let human;
 let humanNumber;
 let cpu;
 let cpuNumber;
+let tie=0;
 let text;
 let round=1;
 let humanScore=0;
 let cpuScore=0;
-let attempt;
 
 function humanThrow(a) { //Changes human input into integer
-   let b = a.toLowerCase();
-   if (b == 'rock') {
+   if (a == 'rock') {
        humanNumber = 1;
-   } else if (b == 'paper') {
+   } else if (a == 'paper') {
        humanNumber = 2;
-   } else if (b == 'scissors') {
+   } else if (a == 'scissors') {
        humanNumber = 3;
-   } else {
-       humanNumber = 0;
-       alert('Invalid input');
    }
-   human = b;
+   human = a;
+   cpuThrow();
+   throwResult();
 }
 
-function cpuThrow(a) { //generates CPU input
+function cpuThrow() { //generates CPU input
    let throwNumber = Math.floor(Math.random() * 3) + 1;
    cpuNumber = throwNumber;
    if (throwNumber == 1) {
@@ -51,46 +54,54 @@ function cpuThrow(a) { //generates CPU input
 
 function throwResult() { //Determines winner based on input and adds to scores
    if (humanNumber == cpuNumber) {
-        text = 'We have a tie!';
+        text = 'Tie!'
+        tie++;
+        document.getElementById("end").innerHTML = `You threw ${human}. CPU threw ${cpu}.`;
    } else if ((humanNumber == 1 && cpuNumber == 2) || (humanNumber == 2 && cpuNumber == 3) || (humanNumber == 3 && cpuNumber == 1)) {
-        text = 'You lose!';
         cpuScore++;
+        text = 'Loss!'
+        document.getElementById("end").innerHTML = `You threw ${human}. CPU threw ${cpu}.`;
    } else if ((cpuNumber == 1 && humanNumber == 2) || (cpuNumber == 2 && humanNumber == 3) || (cpuNumber == 3 && humanNumber == 1)) {
-        text = 'You win!';
         humanScore++;
+        text = 'Win!';
    }
-}
-
-function prompter() {
-    attempt = prompt('What is your throw? Please enter Rock, Paper, or Scissors.', '');
-}
-
-function game() {
-    while (round < 6) { // Runs main functions to generate rolls
-        prompter();
-        humanThrow(attempt);
-        if ((humanNumber > 0) && (round < 6)) {
-            cpuThrow();
-            throwResult();
-            alert(`You threw ${human}, CPU threw ${cpu}. ${text} Round: ${round} You: ${humanScore}, CPU: ${cpuScore}`);
-            round++;
-        } 
-    }
-}
-game();
-if (cpuScore == humanScore) {
-            alert('You tied!');
-            document.getElementById("end").innerHTML = 'Looks like it\'s a tie!';
+        document.getElementById("end").innerHTML = `You threw ${human}. CPU threw ${cpu}.`;
+    if (round >= 5) {
+        if (cpuScore == humanScore) { //triggers if game is over
+            document.getElementById("end").innerHTML = 'Game Over! Looks like it\'s a tie!';
         } else if (humanScore > cpuScore) {
-            //alert('Congratulations! You\'ve won!');
-            document.getElementById("end").innerHTML = 'Congratulations! You\'ve won!';
+            document.getElementById("end").innerHTML = 'Game Over! Congratulations! You\'ve won!';
         } else {
-            //alert('You lose! Reload to try again.')
-            document.getElementById("end").innerHTML = 'You lose! Reload to try again.';
+            document.getElementById("end").innerHTML = 'Game Over! You lose! Reload to try again.';
         }
+        endGame();
+   }
+   round++;
+   document.getElementById("score").innerHTML = `${text} | You: ${humanScore} | CPU: ${cpuScore} | Ties: ${tie} | Round: ${round-1}`;
+}
 
+function endGame() {
+    var elem = document.getElementById('play'); //removes play buttons
+    elem.parentNode.removeChild(elem);
+    reload.style.overflow = 'hidden';
+    reload.style.fontSize = '15px';
+    reload.style.background = 'black';
+    reload.style.boxSizing = 'border-box';
+    reload.style.boxShadow = '0 6px silver';
+    reload.style.border = 'none';
+    reload.style.color = '#fff';
+    reload.style.padding = '20px 60px';
+    reload.style.display = 'inline-block';
+    reload.style.margin = '15px 30px';
+    reload.style.textTransform = 'uppercase';
+    reload.style.letterSpacing = '1px';
+    reload.style.fontWeight = '700';
+    reload.style.outline = 'none';
+    reload.style.position = 'relative';
+}
 
-document.getElementById("score").innerHTML = `Final score = You: ${humanScore} | CPU ${cpuScore}`;
+document.getElementById("score").innerHTML = `Game lasts 5 rounds! Click to begin.`;
+
 function myFunction() {
     location.reload();
 }
